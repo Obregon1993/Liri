@@ -6,7 +6,13 @@ var moment = require('moment');
 
 var keys = require("./keys.js");
 
+var Spotify = require('node-spotify-api');
 // var spotify = new Spotify(keys.spotify);
+var spotify = new Spotify({
+  id: "38ec6da144374380bcf814267f462f5a",
+  secret: "6ed3e8a011b24227acb7929d5113f036"
+});
+ 
 
 if (process.argv[2]===`concert-this`) {
 
@@ -43,6 +49,40 @@ if (process.argv[2]===`concert-this`) {
         });
     
 }else if (process.argv[2]===`spotify-this-song`) {
+  if (process.argv[3]==null) {
+    spotify.search({ type: 'track', query:"The Sign"  }, function(err, data) {
+      if (err) {
+        return console.log('Error occurred: ' + err);
+      }
+     var artist="";
+     for (let index = 0; index < data.tracks.items[6].artists.length; index++) {
+       artist+=data.tracks.items[6].artists[index].name+", ";
+       
+     }
+    
+    console.log(`Artists: ${artist}`);
+    console.log(`Song's  name: ${data.tracks.items[6].name}`);
+    console.log(`Preview link of the song from Spotify: ${data.tracks.items[6].preview_url}`);
+    console.log(`The album that the song is from: ${data.tracks.items[6].album.name}`)
+    });
+  }else{
+  var song=process.argv.slice(3).join(" ");
+  spotify.search({ type: 'track', query:song  }, function(err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
+    }
+   var artist="";
+   for (let index = 0; index < data.tracks.items[0].artists.length; index++) {
+     artist+=data.tracks.items[0].artists[index].name+", ";
+     
+   }
+  
+  console.log(`Artists: ${artist}`);
+  console.log(`Song's  name: ${data.tracks.items[0].name}`);
+  console.log(`Preview link of the song from Spotify: ${data.tracks.items[0].preview_url}`);
+  console.log(`The album that the song is from: ${data.tracks.items[0].album.name}`)
+  });
+  }
     
 }else if (process.argv[2]===`movie-this`) {
   if (process.argv[3]==null) {
