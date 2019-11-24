@@ -14,6 +14,7 @@ var spotify = new Spotify({
 });
  
 
+
 if (process.argv[2]===`concert-this`) {
 
     var artist=process.argv.slice(3).join(" ");
